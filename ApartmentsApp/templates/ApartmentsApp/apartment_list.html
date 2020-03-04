@@ -1,0 +1,13 @@
+{% extends 'ApartmentsApp/base.html' %}
+
+{% block content %}
+    <h2>Apartments list</h2>
+
+    <ul>
+        {% for flat in object_list %}
+            <li><a href="{% url 'details' flat.id %}">{{ flat }}</a></li>
+        {% empty %}
+            <li>No Apartments yet.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

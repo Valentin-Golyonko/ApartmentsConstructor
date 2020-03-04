@@ -1,0 +1,34 @@
+{% extends 'ApartmentsApp/base.html' %}
+
+{% block content %}
+    <h3 style="text-align: center">Hello</h3>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form_set.management_form }}
+        {% for form in form_set %}
+            {# {{ form.instance }} #}
+            {% for field in form %}
+                <p>{{ field.label_tag }} {{ field }}</p>
+            {% endfor %}
+        {% endfor %}
+
+        <br>
+        <hr>
+        <br>
+
+        {{ address_inline_formset.management_form }}
+        {% for iform in address_inline_formset %}
+            {{ iform.as_p }}
+        {% endfor %}
+
+        {{ room_inline_formset.management_form }}
+        {% for iform in room_inline_formset %}
+            {{ iform.as_p }}
+        {% endfor %}
+
+        <button type="submit">submit</button>
+    </form>
+
+{% endblock %}

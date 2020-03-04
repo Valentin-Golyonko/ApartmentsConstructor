@@ -1,32 +1,32 @@
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, ListView
 
-from ApartmentsApp.forms import ApartmentsFormSet, AddressInlineFormSet, RoomInlineFormSet
-from ApartmentsApp.models import Apartments, Address
+from ApartmentsApp.forms import ApartmentsFormSet, AddressInlineFormSet, RoomInlineFormSet, ApartmentsForm
+from ApartmentsApp.models import Apartments
 
 
 class ApartmentsPage(TemplateView):
     template_name = 'ApartmentsApp/Apartments.html'
 
     def get(self, request, *args, **kwargs):
-        apartments = Apartments.objects.order_by('name')
-        address = Apartments.objects.get(id=kwargs['pk'])
+        apartment = Apartments.objects.get(pk=kwargs['pk'])
         response = {
-            'form_set': ApartmentsFormSet(queryset=apartments),
-            'address_inline_formset': AddressInlineFormSet(instance=address),
-            'room_inline_formset': RoomInlineFormSet(instance=address),
+            'apartment_form': ApartmentsForm(instance=apartment),
+            'address_inline_formset': AddressInlineFormSet(instance=apartment),
+            'room_inline_formset': RoomInlineFormSet(instance=apartment),
         }
         return render(request=request, template_name=self.template_name, context=response)
 
-    def post(self, request):
-        formset = ApartmentsFormSet(request.POST)
-        if formset.is_valid():
-            formset.save()
+    def post(self, request, *args, **kwargs):
+        apartment = Apartments.objects.get(pk=kwargs['pk'])
+        apartment_form = ApartmentsForm(request.POST, instance=apartment)
+        if apartment_form.is_valid():
+            apartment_form.save()
             # do something.
         else:
             print('! Form Validation Error')
-            formset.add_error(field=None, error='Form Validation Error')
-        return redirect(to='main-page')
+            apartment_form.add_error(field=None, error='Form Validation Error')
+        return redirect(to='list')
 
 
 class ApartmentsList(ListView):

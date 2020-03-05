@@ -16,10 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from ApartmentsApp.views import ApartmentsPage, ApartmentsList
+from ApartmentsApp.views import ApartmentsList, ApartmentsPageDetails, ApartmentsPageDetailsOld
 
 urlpatterns = [
     path('', ApartmentsList.as_view(), name='list'),
-    path('details/<int:pk>/', ApartmentsPage.as_view(), name='details'),
+    path('details/<int:pk>/', ApartmentsPageDetails.as_view(), name='details'),
+    path('details_old/<int:pk>/', ApartmentsPageDetailsOld.as_view(), name='details-old'),
     path('admin/', admin.site.urls),
 ]

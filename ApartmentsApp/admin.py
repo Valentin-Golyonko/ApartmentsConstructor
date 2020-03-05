@@ -1,15 +1,15 @@
 from django.contrib import admin
 
-from ApartmentsApp.models import Apartments, Address, Room
-
-
-@admin.register(Address)
-class AddressAdmin(admin.ModelAdmin):
-    pass
+from ApartmentsApp.models import (Apartments, Address, Room, Chair)
 
 
 class AddressInline(admin.StackedInline):
     model = Address
+    extra = 0
+
+
+class ChairInline(admin.StackedInline):
+    model = Chair
     extra = 0
 
 
@@ -25,4 +25,14 @@ class ApartmentsAdmin(admin.ModelAdmin):
 
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
+    inlines = (ChairInline,)
+
+
+@admin.register(Chair)
+class ChairAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Address)
+class AddressAdmin(admin.ModelAdmin):
     pass

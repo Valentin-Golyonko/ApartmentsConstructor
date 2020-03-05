@@ -11,8 +11,6 @@ class Apartments(models.Model):
         return f"{self.name} (Apartments_id {self.id})"
 
     name = models.CharField(max_length=50)
-    # address = models.ForeignKey(to='Address', on_delete=models.CASCADE, blank=True, null=True)
-    # room = models.ForeignKey(to='Room', on_delete=models.CASCADE, blank=True, null=True)
 
     choice_list = (
         ('address', 'address'),
@@ -22,7 +20,8 @@ class Apartments(models.Model):
 
 
 class Address(models.Model):
-    apartment = models.ForeignKey(to=Apartments, on_delete=models.CASCADE)
+    apartment = models.ForeignKey(to='Apartments', on_delete=models.CASCADE,
+                                  blank=True, null=True)
 
     country = models.CharField(max_length=50)
     city = models.CharField(max_length=50)
@@ -33,10 +32,18 @@ class Address(models.Model):
 
 
 class Room(models.Model):
-    apartment = models.ForeignKey(to=Apartments, on_delete=models.CASCADE)
+    apartment = models.ForeignKey(to='Apartments', on_delete=models.CASCADE,
+                                  blank=True, null=True)
 
-    count = models.PositiveSmallIntegerField()
-    squire_size = models.FloatField()
+    count = models.PositiveSmallIntegerField(default=1)
+    squire_size = models.FloatField(default=0.0)
 
     def __str__(self):
         return f"Room_id {self.id}"
+
+
+class Chair(models.Model):
+    room = models.ForeignKey(to='Room', on_delete=models.CASCADE,
+                             blank=True, null=True)
+
+    amount = models.PositiveSmallIntegerField(default=1)

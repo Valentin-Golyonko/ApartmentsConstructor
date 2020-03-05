@@ -1,23 +1,23 @@
 {% extends 'ApartmentsApp/base.html' %}
 
 {% block content %}
-    <h3 style="text-align: center">Hello</h3>
+    <h3 style="text-align: center">Apartments: {{ apartment_form.name.value }}</h3>
 
     <form method="post">
         {% csrf_token %}
 
         {{ apartment_form.as_p }}
-
+        <hr>
         {{ address_inline_formset.management_form }}
         {% for iform in address_inline_formset %}
             {{ iform.as_p }}
         {% endfor %}
-
+        <hr>
         {{ room_inline_formset.management_form }}
         {% for iform in room_inline_formset %}
             {{ iform.as_p }}
         {% endfor %}
-
+        <hr>
         <button type="submit">submit</button>
     </form>
 

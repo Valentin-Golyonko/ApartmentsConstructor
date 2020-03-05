@@ -19,5 +19,7 @@ class AddressForm(forms.ModelForm):
 ApartmentsFormSet = modelformset_factory(Apartments, form=ApartmentsForm, fields='__all__',
                                          extra=0, )
 
-AddressInlineFormSet = inlineformset_factory(parent_model=Apartments, model=Address, fields='__all__', extra=0, )
-RoomInlineFormSet = inlineformset_factory(parent_model=Apartments, model=Room, fields='__all__', extra=0, )
+AddressInlineFormSet = inlineformset_factory(parent_model=Apartments, model=Address, fields='__all__',
+                                             extra=0, )
+RoomInlineFormSet = inlineformset_factory(parent_model=Apartments, model=Room, fields='__all__',
+                                          extra=0, )

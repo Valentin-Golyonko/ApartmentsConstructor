@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import modelformset_factory
+from django.forms import modelformset_factory, inlineformset_factory
 
 from ApartmentsApp.models import (Apartments, Chair, Room)
 
@@ -28,3 +28,7 @@ RoomFormset = modelformset_factory(Room, form=RoomForm, fields=('count', 'squire
                                    extra=0, can_delete=True, )
 ChairFormset = modelformset_factory(Chair, form=ChairForm, fields=('amount',),
                                     extra=0, can_delete=True, )
+
+ChairInlineFormset = inlineformset_factory(parent_model=Room, model=Chair, form=ChairForm, fields=('amount',),
+                                           # formset=ChairFormset,
+                                           extra=0, can_delete=True, )

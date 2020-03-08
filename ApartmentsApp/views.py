@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView
 
-from ApartmentsApp.forms import (ApartmentsForm, RoomFormset, ChairFormset)
+from ApartmentsApp.forms import (ApartmentsForm, RoomFormset, ChairFormset, ChairInlineFormset)
 from ApartmentsApp.models import (Apartments, Room, Chair)
 
 
@@ -25,12 +25,12 @@ class ApartmentsPageDetails(TemplateView):
     def get(self, request, *args, **kwargs):
         apartment = Apartments.objects.get(pk=kwargs['pk'])
         rooms = Room.objects.filter(apartment_id=kwargs['pk'])
-        chairs = Chair.objects.filter(room__apartment_id=kwargs['pk'])
+        room = Room.objects.filter(apartment_id=kwargs['pk']).first()
         response = {
             'messages': get_messages(request),
             'apartment_form': ApartmentsForm(instance=apartment),
             'room_formset': RoomFormset(queryset=rooms, prefix='room'),
-            'chair_formset': ChairFormset(queryset=chairs, prefix='chair'),
+            'chair_formset': ChairInlineFormset(instance=room, prefix='chair'),
         }
         return render(request=request, template_name=self.template_name, context=response)
 
@@ -38,11 +38,11 @@ class ApartmentsPageDetails(TemplateView):
         print("POST:", request.POST)
         apartment = Apartments.objects.get(pk=kwargs['pk'])
         rooms = Room.objects.filter(apartment_id=kwargs['pk'])
-        chairs = Chair.objects.filter(room__apartment_id=kwargs['pk'])
+        room = Room.objects.filter(apartment_id=kwargs['pk']).first()
 
         apartment_form = ApartmentsForm(request.POST, instance=apartment)
         room_formset = RoomFormset(request.POST, queryset=rooms, prefix='room')
-        chair_formset = ChairFormset(request.POST, queryset=chairs, prefix='chair')
+        chair_formset = ChairInlineFormset(request.POST, instance=room, prefix='chair')
 
         if apartment_form.is_valid() and room_formset.is_valid() and chair_formset.is_valid():
             apartment_form.save()

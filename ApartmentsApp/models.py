@@ -31,7 +31,7 @@ class Room(models.Model):
     apartment = models.ForeignKey(to='Apartments', on_delete=models.CASCADE,
                                   blank=True, null=True)
 
-    count = models.PositiveSmallIntegerField(default=1)
+    count = models.PositiveSmallIntegerField(default=0)
     squire_size = models.FloatField(default=0.0)
 
     def __str__(self):
@@ -47,4 +47,4 @@ class Chair(models.Model):
     room = models.ForeignKey(to='Room', on_delete=models.CASCADE,
                              blank=True, null=True)
 
-    amount = models.PositiveSmallIntegerField(default=1)
+    amount = models.PositiveSmallIntegerField(default=0)

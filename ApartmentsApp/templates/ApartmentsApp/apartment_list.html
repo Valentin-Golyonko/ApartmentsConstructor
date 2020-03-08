@@ -6,10 +6,12 @@
     <ul>
         {% for flat in object_list %}
             <li>
-                <a href="{% url 'details' flat.id %}">{{ flat }}</a>
+                <a href="{% url 'apartments:details' flat.id %}">{{ flat }}</a>
             </li>
         {% empty %}
             <li>No Apartments yet.</li>
         {% endfor %}
     </ul>
+
+    <a class="btn btn-info" href="{% url 'apartments:add' %}">Add Apartments</a>
 {% endblock %}

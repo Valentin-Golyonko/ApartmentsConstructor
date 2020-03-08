@@ -9,21 +9,42 @@
         <h4>Apartment - {{ apartment_form.name.value }}</h4>
         {{ apartment_form | crispy }}
 
-        {{ room_formset.management_form }}
-        {% for room in room_formset %}
-            <h4>Room # {{ forloop.counter }}</h4>
-            {{ room | crispy }}
+        <div id="room_formset" class="rounded p-2" style="background-color: seagreen">
+            {{ room_formset.management_form }}
+            {% for room in room_formset %}
+                <h4>Room # {{ forloop.counter }}</h4>
+                {{ room | crispy }}
 
-            {{ chair_formset.management_form }}
-            {% for chair in chair_formset %}
-                {% if chair.instance.room.id == room.id.value %}
-                    <h4>Chair # {{ forloop.counter }}</h4>
-                    {{ chair | crispy }}
-                {% endif %}
+                <div id="chair_formset" class="rounded p-1" style="background-color: darkgray">
+                    {{ chair_formset.management_form }}
+                    {% for chair in chair_formset %}
+                        {% if chair.instance.room.id == room.id.value %}
+                            <h4>Chair # {{ forloop.counter }}</h4>
+                            {{ chair | crispy }}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div id="empty_form_chair" style="display:none">
+                    <div class='no_error'>
+                        {{ chair_formset.empty_form | crispy }}
+                    </div>
+                </div>
+                <button id="add_more_chair" class="btn btn-warning" type="button">Add More Chair</button>
+
             {% endfor %}
-
-        {% endfor %}
+        </div>
 
         <button class="btn btn-info" type="submit">Submit</button>
     </form>
+
+    <script>
+        $('#add_more_chair').click(function () {
+            var chair_total = $('#id_chair-TOTAL_FORMS');
+            var form_idx = chair_total.val();
+            console.log('form_idx', form_idx);
+            $('#chair_formset').append($('#empty_form_chair').html().replace(/__prefix__/g, form_idx));
+            chair_total.val(parseInt(form_idx) + 1);
+        });
+    </script>
+
 {% endblock %}

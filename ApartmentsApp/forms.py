@@ -1,10 +1,12 @@
 from django import forms
 from django.forms import modelformset_factory
 
-from ApartmentsApp.models import Apartments, Chair, Room
+from ApartmentsApp.models import (Apartments, Chair, Room)
 
 
 class ApartmentsForm(forms.ModelForm):
+    prefix = 'apartments'
+
     class Meta:
         model = Apartments
         fields = ('name', 'country', 'city', 'street',)
@@ -23,6 +25,6 @@ class ChairForm(forms.ModelForm):
 
 
 RoomFormset = modelformset_factory(Room, form=RoomForm, fields=('count', 'squire_size',),
-                                   extra=0, )
+                                   extra=0, can_delete=True, )
 ChairFormset = modelformset_factory(Chair, form=ChairForm, fields=('amount',),
-                                    extra=0, )
+                                    extra=0, can_delete=True, )

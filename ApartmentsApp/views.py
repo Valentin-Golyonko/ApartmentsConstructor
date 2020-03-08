@@ -1,10 +1,12 @@
 from django.contrib import messages
 from django.contrib.messages import get_messages
-from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView
 
-from ApartmentsApp.forms import *
-from ApartmentsApp.models import Apartments
+from ApartmentsApp.forms import (ApartmentsForm, RoomFormset, ChairFormset)
+from ApartmentsApp.models import (Apartments, Room, Chair)
 
 
 class ApartmentsList(ListView):
@@ -27,8 +29,8 @@ class ApartmentsPageDetails(TemplateView):
         response = {
             'messages': get_messages(request),
             'apartment_form': ApartmentsForm(instance=apartment),
-            'room_formset': RoomFormset(queryset=rooms),
-            'chair_formset': ChairFormset(queryset=chairs),
+            'room_formset': RoomFormset(queryset=rooms, prefix='room'),
+            'chair_formset': ChairFormset(queryset=chairs, prefix='chair'),
         }
         return render(request=request, template_name=self.template_name, context=response)
 
@@ -39,8 +41,8 @@ class ApartmentsPageDetails(TemplateView):
         chairs = Chair.objects.filter(room__apartment_id=kwargs['pk'])
 
         apartment_form = ApartmentsForm(request.POST, instance=apartment)
-        room_formset = RoomFormset(request.POST, queryset=rooms)
-        chair_formset = ChairFormset(request.POST, queryset=chairs)
+        room_formset = RoomFormset(request.POST, queryset=rooms, prefix='room')
+        chair_formset = ChairFormset(request.POST, queryset=chairs, prefix='chair')
 
         if apartment_form.is_valid() and room_formset.is_valid() and chair_formset.is_valid():
             apartment_form.save()
@@ -50,4 +52,23 @@ class ApartmentsPageDetails(TemplateView):
         else:
             messages.error(request, 'Form Validation Error.')
             apartment_form.add_error(field=None, error='Form Validation Error')
-        return redirect(to='list')
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse_lazy('apartments:list')
+
+
+class AddApartments(TemplateView):
+    template_name = 'ApartmentsApp/add.html'
+
+    def get(self, request, *args, **kwargs):
+        response = {
+
+        }
+        return render(request=request, template_name=self.template_name, context=response)
+
+    def post(self, request):
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse_lazy('apartments:list')

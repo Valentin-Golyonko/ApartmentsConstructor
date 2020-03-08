@@ -1,0 +1,13 @@
+{% extends 'ApartmentsApp/base.html' %}
+{% block content %}
+
+    <h3>Add Apartments</h3>
+
+    <form method="post">
+        {% csrf_token %}
+
+
+        <button class="btn btn-info" type="submit">Confirm</button>
+    </form>
+
+{% endblock %}

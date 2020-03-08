@@ -7,7 +7,6 @@
         {% for flat in object_list %}
             <li>
                 <a href="{% url 'details' flat.id %}">{{ flat }}</a>
-                <a href="{% url 'details-old' flat.id %}">(OLD{{ flat }})</a>
             </li>
         {% empty %}
             <li>No Apartments yet.</li>

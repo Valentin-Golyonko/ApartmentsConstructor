@@ -1,0 +1,11 @@
+.message-include {
+    z-index: 1;
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    width: 30%
+}
+
+.my-nav-margin {
+    margin: 0 -15px 0 -15px
+}

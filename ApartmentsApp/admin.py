@@ -1,11 +1,6 @@
 from django.contrib import admin
 
-from ApartmentsApp.models import (Apartments, Address, Room, Chair)
-
-
-class AddressInline(admin.StackedInline):
-    model = Address
-    extra = 0
+from ApartmentsApp.models import (Apartments, Room, Chair)
 
 
 class ChairInline(admin.StackedInline):
@@ -20,7 +15,7 @@ class RoomInline(admin.StackedInline):
 
 @admin.register(Apartments)
 class ApartmentsAdmin(admin.ModelAdmin):
-    inlines = (AddressInline, RoomInline,)
+    inlines = (RoomInline,)
 
 
 @admin.register(Room)
@@ -30,9 +25,4 @@ class RoomAdmin(admin.ModelAdmin):
 
 @admin.register(Chair)
 class ChairAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(Address)
-class AddressAdmin(admin.ModelAdmin):
     pass

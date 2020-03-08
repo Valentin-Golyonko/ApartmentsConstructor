@@ -1,92 +1,29 @@
 {% extends 'ApartmentsApp/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
 
 {% block content %}
-    <form action="" method="post" enctype="multipart/form-data">
-
-        {% for hidden_field in form.hidden_fields %}
-            {{ hidden_field.errors }}
-            {{ hidden_field }}
-        {% endfor %}
-
+    <form method="post">
         {% csrf_token %}
 
-        {{ form.management_form }}
-        {{ form.non_form_errors }}
+        <h4>Apartment - {{ apartment_form.name.value }}</h4>
+        {{ apartment_form | crispy }}
 
-        {% for room_form in form.forms %}
+        {{ room_formset.management_form }}
+        {% for room in room_formset %}
+            <h4>Room # {{ forloop.counter }}</h4>
+            {{ room | crispy }}
 
-            <hr>
-
-            <h2>
-                {% if room_form.instance.id %}
-                    Room #{{ room_form.instance.id }}</h2>
-                {% else %}
-                    {% if form.forms|length > 1 %}
-                        Add another Room
-                    {% else %}
-                        Add a Room
-                    {% endif %}
+            {{ chair_formset.management_form }}
+            {% for chair in chair_formset %}
+                {% if chair.instance.room.id == room.id.value %}
+                    <h4>Chair # {{ forloop.counter }}</h4>
+                    {{ chair | crispy }}
                 {% endif %}
-            </h2>
-
-            {% for hidden_field in room_form.hidden_fields %}
-                {{ hidden_field.errors }}
             {% endfor %}
-
-            <table>
-                {{ room_form.as_table }}
-            </table>
-
-            {% if room_form.nested %}
-                <div class="indent">
-
-                    <h3>Chairs</h3>
-
-                    {{ room_form.nested.management_form }}
-                    {{ room_form.nested.non_form_errors }}
-
-                    <table>
-                        {% for chair_form in room_form.nested.forms %}
-
-                            <tr>
-                                <td>
-                                    <em>
-                                        {% if chair_form.instance.id %}
-                                            Chair #{{ chair_form.instance.id }}
-                                        {% else %}
-                                            Add an chair
-                                        {% endif %}
-                                    </em>
-                                </td>
-                                <td>
-                                    {% for hidden_field in chair_form.hidden_fields %}
-                                        {{ hidden_field.errors }}
-                                    {% endfor %}
-
-                                    <table>
-                                        {{ chair_form.as_table }}
-                                    </table>
-                                </td>
-                                <td>
-                                    {% if chair_form.instance.image %}
-                                        <img src="{{ chair_form.instance.image.url }}" height="100"
-                                             alt="{{ nested.form.instance.alt_text }}">
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </table>
-                </div>
-            {% endif %}
 
         {% endfor %}
 
-        <hr>
-
-        <p>
-            <input type="submit" value="Update books">
-            &nbsp; &nbsp;
-            <a href="{{ publisher.get_absolute_url }}">Cancel</a>
-        </p>
+        <button class="btn btn-info" type="submit">Submit</button>
     </form>
 {% endblock %}
